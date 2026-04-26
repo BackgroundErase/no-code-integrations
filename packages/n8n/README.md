@@ -76,5 +76,3 @@ Published package name:
 ## Billing Language
 
 BackgroundErase uses metered monthly billing. Each successfully processed image is counted as one billable image. The node output includes `billing_model`, `usage_unit`, and `billable_units` so teams can understand how workflow executions map to BackgroundErase usage.
-
-Do not use credits language for this integration.

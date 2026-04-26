@@ -27,5 +27,3 @@ jobs:
       - run: npm install --global npm@11.6.2
       - run: npm ci
       - run: npm run release
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
