@@ -1,0 +1,22 @@
+{
+  "name": "backgrounderase-zapier",
+  "version": "1.0.0",
+  "description": "Zapier CLI integration for the BackgroundErase background removal API.",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "jest --runInBand",
+    "validate": "zapier-platform validate"
+  },
+  "dependencies": {
+    "form-data": "4.0.4",
+    "zapier-platform-core": "18.5.0"
+  },
+  "devDependencies": {
+    "jest": "29.7.0",
+    "zapier-platform-cli": "18.5.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
