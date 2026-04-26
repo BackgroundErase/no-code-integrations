@@ -1,4 +1,4 @@
-# n8n-nodes-backgrounderase
+# @backgrounderase/n8n-nodes-backgrounderase
 
 n8n community node for the BackgroundErase background removal API.
 
@@ -66,6 +66,12 @@ npm run dev
 ```
 
 `npm run dev` starts a local n8n instance with this node loaded. Open `http://localhost:5678`, add the BackgroundErase node to a workflow, create a BackgroundErase API credential, and test each operation.
+
+Published package name:
+
+```text
+@backgrounderase/n8n-nodes-backgrounderase
+```
 
 ## Billing Language
 
