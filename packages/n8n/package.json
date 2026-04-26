@@ -1,6 +1,6 @@
 {
   "name": "@backgrounderase/n8n-nodes-backgrounderase",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "n8n community node for removing image backgrounds with BackgroundErase.",
   "license": "MIT",
   "homepage": "https://backgrounderase.com",
@@ -17,7 +17,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/BackgroundErase/no-code-integrations"
+    "url": "https://github.com/BackgroundErase/no-code-integrations",
+    "directory": "packages/n8n"
   },
   "scripts": {
     "build": "n8n-node build",
