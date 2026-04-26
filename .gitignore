@@ -1,4 +1,6 @@
 node_modules/
 packages/*/node_modules/
 packages/*/dist/
+!packages/n8n/dist/
+!packages/n8n/dist/**
 .DS_Store
