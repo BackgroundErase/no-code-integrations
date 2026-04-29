@@ -7,8 +7,14 @@ import type {
 	INodeExecutionData,
 	INodeType,
 	INodeTypeDescription,
+	JsonObject,
 } from 'n8n-workflow';
-import { ApplicationError, NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
+import {
+	ApplicationError,
+	NodeApiError,
+	NodeConnectionTypes,
+	NodeOperationError,
+} from 'n8n-workflow';
 
 const API_BASE_URL = 'https://api.backgrounderase.com';
 
@@ -82,6 +88,28 @@ function responseBodyToBuffer(body: unknown): Buffer {
 	if (typeof body === 'string') return Buffer.from(body, 'binary');
 
 	throw new ApplicationError('BackgroundErase returned an unsupported binary response.');
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+	return typeof value === 'object' && value !== null;
+}
+
+function isHttpRequestError(error: unknown): error is JsonObject {
+	if (!isRecord(error)) return false;
+
+	const response = error.response;
+	const cause = error.cause;
+
+	return (
+		error instanceof NodeApiError ||
+		typeof error.httpCode === 'number' ||
+		typeof error.httpCode === 'string' ||
+		typeof error.statusCode === 'number' ||
+		typeof error.status === 'number' ||
+		(isRecord(response) &&
+			(typeof response.status === 'number' || typeof response.statusCode === 'number')) ||
+		(isRecord(cause) && cause.constructor?.name === 'AxiosError')
+	);
 }
 
 function parseJsonParameter(value: unknown, fieldName: string): IDataObject | undefined {
@@ -655,7 +683,11 @@ export class BackgroundErase implements INodeType {
 					continue;
 				}
 
-				if (error instanceof NodeOperationError) throw error;
+				if (error instanceof NodeApiError || error instanceof NodeOperationError) throw error;
+				if (isHttpRequestError(error)) {
+					throw new NodeApiError(this.getNode(), error, { itemIndex });
+				}
+
 				throw new NodeOperationError(this.getNode(), error as Error, { itemIndex });
 			}
 		}

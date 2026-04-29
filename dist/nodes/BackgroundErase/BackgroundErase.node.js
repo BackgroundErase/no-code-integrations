@@ -49,6 +49,24 @@ function responseBodyToBuffer(body) {
         return Buffer.from(body, 'binary');
     throw new n8n_workflow_1.ApplicationError('BackgroundErase returned an unsupported binary response.');
 }
+function isRecord(value) {
+    return typeof value === 'object' && value !== null;
+}
+function isHttpRequestError(error) {
+    var _a;
+    if (!isRecord(error))
+        return false;
+    const response = error.response;
+    const cause = error.cause;
+    return (error instanceof n8n_workflow_1.NodeApiError ||
+        typeof error.httpCode === 'number' ||
+        typeof error.httpCode === 'string' ||
+        typeof error.statusCode === 'number' ||
+        typeof error.status === 'number' ||
+        (isRecord(response) &&
+            (typeof response.status === 'number' || typeof response.statusCode === 'number')) ||
+        (isRecord(cause) && ((_a = cause.constructor) === null || _a === void 0 ? void 0 : _a.name) === 'AxiosError'));
+}
 function parseJsonParameter(value, fieldName) {
     if (value === undefined || value === null || value === '')
         return undefined;
@@ -523,8 +541,11 @@ class BackgroundErase {
                     });
                     continue;
                 }
-                if (error instanceof n8n_workflow_1.NodeOperationError)
+                if (error instanceof n8n_workflow_1.NodeApiError || error instanceof n8n_workflow_1.NodeOperationError)
                     throw error;
+                if (isHttpRequestError(error)) {
+                    throw new n8n_workflow_1.NodeApiError(this.getNode(), error, { itemIndex });
+                }
                 throw new n8n_workflow_1.NodeOperationError(this.getNode(), error, { itemIndex });
             }
         }
